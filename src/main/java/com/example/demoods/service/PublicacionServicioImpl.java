@@ -5,6 +5,7 @@ import com.example.demoods.dto.PublicacionRespuesta;
 import com.example.demoods.entity.Publicacion;
 import com.example.demoods.exeption.ResourceNotFoundException;
 import com.example.demoods.repository.IPublicacionRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 public class PublicacionServicioImpl implements IPublicacionServicio {
     @Autowired
     private IPublicacionRepository iPublicacionRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
     public PublicacionDTO crearPublicacion(PublicacionDTO publicacionDTO) {
         Publicacion publicacion=iPublicacionRepository.save(convertirEntidad(publicacionDTO));
@@ -72,19 +75,12 @@ public class PublicacionServicioImpl implements IPublicacionServicio {
 
     //convertir DTO a Entidad
     private Publicacion convertirEntidad(PublicacionDTO publicacionDTO){
-        Publicacion publicacion=new Publicacion();
-        publicacion.setTitulo(publicacionDTO.getTitulo());
-        publicacion.setDescripcion(publicacionDTO.getDescripcion());
-        publicacion.setContenido(publicacionDTO.getContenido());
+        Publicacion publicacion=modelMapper.map(publicacionDTO,Publicacion.class);
         return publicacion;
     }
     //convertir Entidad a DTO
     private PublicacionDTO convertirDTO(Publicacion publicacion){
-        PublicacionDTO publicacionDTO=new PublicacionDTO();
-        publicacionDTO.setId(publicacion.getId());
-        publicacionDTO.setTitulo(publicacion.getTitulo());
-        publicacionDTO.setDescripcion(publicacion.getDescripcion());
-        publicacionDTO.setContenido(publicacion.getContenido());
+        PublicacionDTO publicacionDTO=modelMapper.map(publicacion,PublicacionDTO.class);
         return publicacionDTO;
     }
 }

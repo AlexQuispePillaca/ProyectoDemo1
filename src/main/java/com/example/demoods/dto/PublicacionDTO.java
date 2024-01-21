@@ -1,10 +1,24 @@
 package com.example.demoods.dto;
 
+import com.example.demoods.entity.Comentario;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
+import java.util.Set;
+
 public class PublicacionDTO {
     private Long id;
+    @NotEmpty
+    @Size(min = 2,message = "titulo muy corto")
     private String titulo;
+    @NotEmpty
+    @Size(min = 5,message = "descripcion muy corta")
     private String descripcion;
+
     private String contenido;
+
+    private Set<Comentario> comentarios;
+
 
     public Long getId() {
         return id;
@@ -36,6 +50,14 @@ public class PublicacionDTO {
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
+    }
+
+    public Set<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(Set<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
     public PublicacionDTO(Long id, String titulo, String descripcion, String contenido) {

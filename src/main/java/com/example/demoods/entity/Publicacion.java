@@ -1,5 +1,6 @@
 package com.example.demoods.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,6 +20,9 @@ public class Publicacion {
     private String descripcion;
     @Column(name = "contenido",nullable = false)
     private String contenido;
+    @JsonBackReference
     @OneToMany(mappedBy = "publicacion",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Comentario> comentarios=new HashSet<>();
+
+
 }

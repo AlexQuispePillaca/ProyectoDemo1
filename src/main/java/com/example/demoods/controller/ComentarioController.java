@@ -18,20 +18,31 @@ public class ComentarioController {
     @Autowired
     private IComentarioServicio iComentarioServicio;
 
+    //Guardar Comentario con el Id de la publicación correspondiente
     @PostMapping("/publicaciones/{publicacionId}/comentarios")
     public ResponseEntity<ComentarioDTO> guardarComentario(@PathVariable(name = "publicacionId")long publicacionId,@RequestBody ComentarioDTO comentarioDTO){
         return new ResponseEntity<>(iComentarioServicio.guardarComentario(publicacionId,comentarioDTO), HttpStatus.CREATED);
-
-
     }
+    //Obterner Comentario por Id de publicación
     @GetMapping("/publicaciones/{publicacionId}/comentarios")
-    public List<ComentarioDTO> obtnerPublicacionPorId(@PathVariable(name = "publicacionId")long puvblicacionId){
+    public List<ComentarioDTO> obtnerComentariosPorIdPublicacion(@PathVariable(name = "publicacionId")Long puvblicacionId){
         return iComentarioServicio.obtenerComentarioPorPublicacionId(puvblicacionId);
     }
-
-    @GetMapping("/publicaciones/comentarios/{comentarioId}")
-    public ResponseEntity<ComentarioDTO> obtenerComentarioPorId(@PathVariable(name = "comentarioId")long comentarioId){
-        return ResponseEntity.ok(iComentarioServicio.obtenerComentarioPorId(comentarioId));
+    //Obtener comentario por Id de comentario
+    @GetMapping("/publicaciones/{publicacionId}/comentarios/{comentarioId}")
+    public ResponseEntity<ComentarioDTO> obtenerComentarioPorId(@PathVariable(name = "publicacionId")Long publicacionId,@PathVariable(name = "comentarioId")Long comentarioId){
+        ComentarioDTO comentarioDTO=iComentarioServicio.obtenerComentarioPorId(publicacionId,comentarioId);
+        return new ResponseEntity<>(comentarioDTO,HttpStatus.OK);
+    }
+    @PutMapping("/publicaciones/{publicacionId}/comentarios/{comentarioId}")
+    public ResponseEntity<ComentarioDTO> actualizarComentario(@PathVariable(name = "publicacionId")Long publicacionId,@RequestBody ComentarioDTO cuerpoComentarioDTO,@PathVariable(name = "comentarioId")Long comentarioId){
+        ComentarioDTO comentarioDTO=iComentarioServicio.actualizarComentario(publicacionId,cuerpoComentarioDTO,comentarioId);
+        return new ResponseEntity<>(comentarioDTO,HttpStatus.OK);
+    }
+    @DeleteMapping("/publicaciones/{publicacionId}/comentarios/{comentarioId}")
+    public ResponseEntity<String> eliminarComentario(@PathVariable(name = "publicacionId")Long publicacionId,@PathVariable(name = "comentarioId")Long comentarioId){
+        iComentarioServicio.eliminarComentarioPorId(publicacionId,comentarioId);
+        return new ResponseEntity<>("comentario elominado",HttpStatus.OK);
     }
 
 
